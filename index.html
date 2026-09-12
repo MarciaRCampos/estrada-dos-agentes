@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>A estrada dos agentes — construa o seu no Copilot Studio</title>
+<meta name="author" content="Márcia Rodrigues Campos"/>
+<meta name="description" content="Tutorial gamificado para criar um agente de IA no Microsoft Copilot Studio, do zero à publicação."/>
+<meta name="copyright" content="© 2026 Márcia Rodrigues Campos"/>
+<meta name="license" content="CC BY-NC-SA 4.0"/>
+<meta name="dcterms.created" content="2026-09-12"/>
+<style>
+:root{
+  --tinta:#14202b; --tinta-2:#4a5a68; --tinta-3:#7a8894;
+  --papel:#eef1f3; --carta:#ffffff; --linha:#d6dde2;
+  --campo:#2e7d5b; --oficina:#b96b13; --metropole:#3b4fa8;
+  --certo:#1f7a4d; --errado:#c0422c; --ouro:#b07d12;
+  --ceu:#f6e7d4; --acento:var(--campo); --raio:10px;
+}
+@media (prefers-color-scheme: dark){
+  :root{--tinta:#e8edf1;--tinta-2:#a7b3bd;--tinta-3:#7d8b96;--papel:#101820;--carta:#18222c;--linha:#2c3a46;
+  --campo:#5fbf90;--oficina:#e0a04a;--metropole:#8b9cf0;--certo:#5fbf90;--errado:#e8735a;--ouro:#e0b84a;}
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--papel);color:var(--tinta);
+ font-family:"Segoe UI Variable Text","Segoe UI",system-ui,-apple-system,Roboto,sans-serif;
+ font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+.wrap{max-width:580px;margin:0 auto;padding:20px 18px 56px}
+h1{font-size:26px;line-height:1.25;font-weight:600;margin:0 0 6px;letter-spacing:-.01em}
+h2{font-size:19px;font-weight:600;margin:0 0 8px}
+p{margin:0 0 12px}
+.fina{color:var(--tinta-2);font-size:14.5px}
+.menor{font-size:13px;color:var(--tinta-3)}
+button{font:inherit;font-size:15px;color:var(--tinta);background:var(--carta);border:1px solid var(--linha);
+ border-radius:var(--raio);padding:11px 16px;cursor:pointer;transition:border-color .15s,background .15s}
+button:hover{border-color:var(--tinta-3)}
+button:focus-visible{outline:2px solid var(--acento);outline-offset:2px}
+.principal{background:var(--acento);border-color:var(--acento);color:#fff;font-weight:600}
+.principal:hover{filter:brightness(1.07)}
+input[type=text]{font:inherit;width:100%;padding:11px 13px;border:1px solid var(--linha);border-radius:var(--raio);
+ background:var(--carta);color:var(--tinta);margin-bottom:12px}
+input[type=text]:focus{outline:2px solid var(--acento);outline-offset:1px;border-color:var(--acento)}
+label{display:block;font-size:13px;color:var(--tinta-2);margin-bottom:4px}
+.cartao{background:var(--carta);border:1px solid var(--linha);border-radius:14px;padding:18px 20px}
+.cena{position:relative;height:150px;border-radius:14px;overflow:hidden;background:var(--ceu);margin-bottom:14px}
+.mundo{position:absolute;inset:0 auto 0 0;width:200%;height:100%;display:flex}
+.meio{position:relative;width:50%;height:100%}
+.chao{position:absolute;left:0;right:0;bottom:26px;height:2px;background:rgba(20,32,43,.28)}
+.heroi{position:absolute;left:42%;bottom:24px;z-index:3}
+.marco{position:absolute;left:63%;bottom:26px;z-index:2;text-align:center}
+.marco .caixa{width:42px;height:42px;border-radius:11px;background:var(--carta);border:1px solid var(--linha);
+ display:flex;align-items:center;justify-content:center;margin:0 auto}
+.marco span{display:inline-block;margin-top:3px;font-size:10.5px;background:var(--carta);border:1px solid var(--linha);
+ border-radius:999px;padding:1px 7px;white-space:nowrap;color:var(--tinta-2)}
+.selo{position:absolute;top:10px;left:12px;font-size:11.5px;background:var(--carta);border:1px solid var(--linha);
+ border-radius:999px;padding:3px 10px;color:var(--tinta-2);z-index:3}
+.anda{animation:passo .32s linear 4}
+@keyframes passo{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+@media (prefers-reduced-motion: reduce){.anda{animation:none}.mundo{transition:none!important}}
+.trilho{display:flex;gap:5px;margin-top:7px}
+.pino{width:9px;height:9px;border-radius:50%;background:var(--linha)}
+.pino.feito{background:var(--certo)}
+.pino.atual{background:var(--acento)}
+.topo{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:14px}
+.tros{display:flex;gap:5px}
+.cabeca-cartao{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:8px}
+.tipo{font-size:11.5px;border-radius:999px;padding:3px 10px;white-space:nowrap}
+.tipo.faca{background:rgba(46,125,91,.14);color:var(--certo);border:1px solid rgba(46,125,91,.4)}
+.tipo.saiba{background:rgba(59,79,168,.14);color:var(--metropole);border:1px solid rgba(59,79,168,.4)}
+ol.passos-lista{margin:0 0 14px;padding-left:20px}
+ol.passos-lista li{margin:6px 0;color:var(--tinta-2);font-size:14.5px}
+.rotulo{font-size:13px;font-weight:600;margin:0 0 6px}
+.bloco{border:1px solid var(--linha);border-radius:var(--raio);padding:12px 14px;margin:0 0 14px;background:var(--papel)}
+.bloco pre{margin:0 0 10px;white-space:pre-wrap;font-family:inherit;font-size:14px;color:var(--tinta)}
+.opcao{display:block;width:100%;text-align:left;margin:7px 0;line-height:1.45}
+.opcao.certa{background:rgba(31,122,77,.12);border-color:var(--certo)}
+.opcao.errada{background:rgba(192,66,44,.12);border-color:var(--errado)}
+.avatares{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:14px 0 18px}
+.av{display:flex;flex-direction:column;align-items:center;gap:6px;padding:14px 8px}
+.av.on{border-color:var(--acento);background:rgba(46,125,91,.08)}
+.erro{color:var(--errado);font-size:13.5px;margin:6px 0 0;min-height:18px}
+.registro{border:1px solid var(--ouro);border-radius:14px;padding:22px;text-align:center;background:var(--carta)}
+.ficha{background:var(--carta);border:1px solid var(--linha);border-radius:var(--raio);padding:10px 14px;margin-bottom:14px;font-size:13.5px;color:var(--tinta-2)}
+.barra-salvo{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:18px;font-size:12.5px;color:var(--tinta-3)}
+.link{background:none;border:none;padding:0;font-size:12.5px;color:var(--tinta-2);text-decoration:underline;cursor:pointer}
+.palco{display:grid;gap:18px}
+.coluna-esq{min-width:0}
+.coluna-dir{min-width:0}
+@media (min-width:900px){
+  .wrap{max-width:1060px}
+  .palco{grid-template-columns:380px minmax(0,1fr);align-items:start}
+  .coluna-esq{position:sticky;top:20px}
+  .cena{height:190px}
+}
+footer{margin-top:28px;padding-top:14px;border-top:1px solid var(--linha)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<section id="prerequisitos">
+  <h1>Antes de começar</h1>
+  <p class="fina">Este tutorial constrói um agente de verdade enquanto você joga. Para isso funcionar sem travar no meio, confira a lista abaixo. Se faltar algo, resolva com o time de plataforma antes de começar.</p>
+
+  <div class="cartao" style="margin-bottom:14px">
+    <p class="rotulo">O que você precisa ter</p>
+    <ol class="passos-lista" style="margin-bottom:0">
+      <li>Acesso ao Copilot Studio com a sua conta corporativa e licença que permita criar agentes</li>
+      <li>Um ambiente de desenvolvimento ou de testes, separado de produção</li>
+      <li>Permissão para criar agentes nesse ambiente</li>
+      <li>De três a dez documentos oficiais e atuais sobre o assunto escolhido, no SharePoint ou em arquivos</li>
+      <li>Pelo menos um conector liberado, como o do Outlook, para a parada de ferramentas do trecho 2</li>
+      <li>Permissão para publicar o agente no Microsoft Teams</li>
+      <li>Cerca de duas a três horas, que podem ser divididas em vários dias</li>
+    </ol>
+  </div>
+
+  <div id="retomar-pre"></div>
+  <button class="principal" id="ir-inicio">Tenho o necessário, começar</button>
+  <p class="menor" style="margin-top:10px">Sem todos os itens você ainda consegue percorrer a estrada e aprender, mas algumas paradas não poderão ser executadas no Copilot Studio.</p>
+</section>
+
+<section id="inicio" hidden>
+  <h1>A estrada dos agentes</h1>
+  <p class="fina">Um tutorial em forma de jornada: você abre o Copilot Studio numa janela, este jogo em outra, e ao chegar ao fim tem um agente de verdade publicado. São três trechos e trinta paradas. O progresso fica salvo neste navegador.</p>
+  <p class="fina">Você não precisa saber programar. Cada parada diz onde clicar e traz o texto pronto para colar. Se a sua tela estiver um pouco diferente, procure pelo nome do recurso citado: o Copilot Studio muda de aparência com frequência.</p>
+
+  <h2>Quem vai percorrer</h2>
+  <div class="avatares" id="lista-avatares"></div>
+  <label for="nome">Seu nome</label>
+  <input type="text" id="nome" placeholder="Como você quer ser chamado" autocomplete="name"/>
+
+  <h2>O agente que você vai construir</h2>
+  <p class="fina">Escolha um assunto que você domina e que gera dúvidas repetidas na sua área. Quanto mais concreto, melhor.</p>
+  <label for="tema">Assunto do agente</label>
+  <input type="text" id="tema" placeholder="Ex.: normativos de crédito, rotinas de abertura de conta"/>
+  <label for="publico">Quem vai usar</label>
+  <input type="text" id="publico" placeholder="Ex.: gerentes da rede de agências"/>
+  <label for="agente">Nome do agente</label>
+  <input type="text" id="agente" placeholder="Ex.: Assistente de Normativos"/>
+  <p class="erro" id="erro-inicio"></p>
+  <button class="principal" id="comecar">Começar a caminhada</button>
+  <div id="retomar"></div>
+</section>
+
+<section id="jogo" hidden>
+ <div class="palco">
+  <div class="coluna-esq">
+    <div class="cena">
+      <div class="mundo" id="mundo"></div>
+      <div class="marco" id="marco" hidden></div>
+      <div class="heroi" id="heroi"></div>
+      <div class="selo" id="selo"></div>
+    </div>
+    <div class="topo">
+      <div>
+        <p id="titulo-trecho" style="margin:0;font-size:14.5px;font-weight:600"></p>
+        <div class="trilho" id="trilho"></div>
+      </div>
+      <div class="tros" id="trofeus"></div>
+    </div>
+    <div class="ficha" id="ficha"></div>
+    <div class="barra-salvo" style="margin-top:0">
+      <span>Progresso salvo neste navegador</span>
+      <button class="link" id="recomecar">Recomeçar do início</button>
+    </div>
+  </div>
+  <div class="coluna-dir">
+    <div id="painel"></div>
+  </div>
+ </div>
+</section>
+
+<footer>
+  <p class="menor" style="margin:0">Conteúdo revisado em 12 de setembro de 2026, com base na documentação do Microsoft Copilot Studio. A plataforma publica novidades quase todo mês: confira a data antes de usar em treinamento.</p>
+  <p class="menor" style="margin:6px 0 0">Responsável pelo conteúdo: Márcia Rodrigues Campos · Próxima revisão prevista: dezembro de 2026</p>
+  <p class="menor" style="margin:10px 0 0">A estrada dos agentes © 2026 Márcia Rodrigues Campos. Obra licenciada sob Creative Commons Atribuição-NãoComercial-CompartilhaIgual 4.0 Internacional (CC BY-NC-SA 4.0): você pode usar, adaptar e redistribuir mantendo o crédito à autora, sem uso comercial, e licenciando os derivados da mesma forma.</p>
+</footer>
+
+</div>
+<script>
+/*
+  A estrada dos agentes — tutorial gamificado de criação de agentes no Microsoft Copilot Studio
+  Autoria: Márcia Rodrigues Campos · 2026
+  Licença: CC BY-NC-SA 4.0 — uso e adaptação permitidos com crédito, sem fins comerciais
+  Conteúdo revisado em 12 de setembro de 2026
+*/
+const CHAVE="estrada-agentes-v2";
+
+const TRECHOS=[
+ {n:"Trecho 1 — do zero ao agente publicado",reg:"Construtor iniciante",cen:"Campo dos moinhos, ao amanhecer",ceu:"#f7e6cf",ceuEscuro:"#2a2218",cor:"var(--campo)"},
+ {n:"Trecho 2 — ensinando o agente a agir",reg:"Construtor de agentes",cen:"Forja das ferramentas, à tarde",ceu:"#f6ead6",ceuEscuro:"#2b2418",cor:"var(--oficina)"},
+ {n:"Trecho 3 — pronto para os outros usarem",reg:"Arquiteto de agentes",cen:"Cidadela conectada, à noite",ceu:"#1e2440",ceuEscuro:"#141a30",cor:"var(--metropole)"}
+];
+
+const MARCOS={0:["bandeira","Ponto de partida"],5:["celeiro","Celeiro do conhecimento"],9:["portal","Portal de publicação"],
+ 10:["bancada","Bancada de montagem"],16:["ferramenta","Galpão de ferramentas"],19:["vitrine","Vitrine de respostas"],
+ 21:["torre","Torre dos agentes"],27:["portao","Portão de políticas"],29:["radar","Centro de controle"]};
+
+const ICONES={
+ bandeira:'<path d="M7 21V4m0 0h10l-2.5 4L17 12H7"/>',
+ celeiro:'<path d="M4 20V10l8-5 8 5v10M9 20v-6h6v6"/>',
+ portal:'<path d="M12 3l7 5v13H5V8zM9 21v-7h6v7"/>',
+ bancada:'<path d="M3 14h18M6 14V9m12 5V9M8 9h8M10 14v6m4-6v6"/>',
+ ferramenta:'<path d="M9 4v5m6-5v5M7 9h10v4a5 5 0 0 1-10 0zM12 18v3"/>',
+ vitrine:'<path d="M4 8h16v11H4zM4 8l2-4h12l2 4M9 19v-7h6v7"/>',
+ torre:'<path d="M12 3v18M8 9l4-3 4 3M6 15l6-4 6 4"/>',
+ portao:'<path d="M12 3l7 3v6c0 4-3 7-7 9-4-2-7-5-7-9V6zM9 12l2 2 4-4"/>',
+ radar:'<path d="M12 12l6-4M4 12a8 8 0 1 1 8 8M8 12a4 4 0 1 1 4 4"/>'
+};
+
+const PARADAS=[
+{ti:"Abrir o Copilot Studio no lugar certo",tipo:"faca",
+ li:"Todo agente vive dentro de um ambiente. O ambiente define quem acessa, quais conectores existem e quais regras de dados valem. Começar no lugar errado dá retrabalho depois.",
+ p:["Abra copilotstudio.microsoft.com e entre com a sua conta corporativa","No alto da tela, procure o seletor de ambiente e clique nele","Escolha um ambiente de desenvolvimento ou de testes. Se só existir produção, pare aqui e peça um ambiente ao time de plataforma antes de seguir"],
+ q:"Por que não construir direto no ambiente de produção?",
+ o:["Fica mais lento","Porque não dá para testar e aprovar antes que outras pessoas usem","Não muda nada"],c:1,
+ e:"Ambiente de desenvolvimento é onde você pode errar sem afetar ninguém."},
+
+{ti:"Criar o seu agente",tipo:"faca",
+ li:"O Copilot Studio monta um rascunho a partir de uma descrição em linguagem natural. É a forma mais rápida de começar, e tudo o que ele propuser pode ser mudado.",
+ p:["No menu lateral, clique em Criar","Escolha começar descrevendo o agente em linguagem natural","Cole o texto abaixo no campo de descrição e siga até o agente ser criado","Quando pedir o nome, use: {AGENTE}"],
+ rot:"Cole na descrição do agente",
+ txt:"Crie um agente que responda dúvidas sobre {TEMA} para {PUBLICO}. Ele deve responder apenas com base nos documentos que eu fornecer, citar a fonte de cada resposta e dizer claramente quando não encontrar a informação.",
+ q:"O que esse primeiro passo entrega?",
+ o:["Um agente pronto para publicar","Um rascunho que você ainda vai revisar e ajustar","Um relatório sobre o assunto"],c:1,
+ e:"O rascunho economiza tempo. A qualidade vem do que você faz nas próximas paradas."},
+
+{ti:"Reconhecer a tela em que você está",tipo:"faca",
+ li:"Existem duas experiências de criação convivendo: a padrão e a nova, com runtime de orquestração aprimorado. Tutoriais podem descrever uma e você estar na outra.",
+ p:["Olhe o menu lateral do seu agente e anote os nomes que aparecem: visão geral, conhecimento, tópicos, ferramentas, atividade","Se algum nome citado aqui não existir na sua tela, procure pelo mais parecido","Se ficar em dúvida, pergunte à área de plataforma qual experiência é a padrão no seu ambiente"],
+ q:"Você segue um passo a passo e as telas não batem. A causa mais provável:",
+ o:["O agente está com defeito","O material descreve a outra experiência de criação","Falta licença"],c:1,
+ e:"Saber em qual experiência você está evita meia hora procurando um botão que mudou de lugar."},
+
+{ti:"Escrever as instruções",tipo:"faca",
+ li:"As instruções são o comportamento do agente: quem ele é, o que faz, o que se recusa a fazer. É o ajuste que mais muda a qualidade das respostas.",
+ p:["No menu do agente, abra visão geral","Encontre o campo de instruções e apague o texto que estiver lá","Cole o texto abaixo e salve","Leia uma vez: tudo o que estiver ali vira regra de conduta do agente"],
+ rot:"Cole no campo de instruções",
+ txt:"Você é o {AGENTE}, assistente de {TEMA} para {PUBLICO}.\nResponda somente com base nas fontes de conhecimento conectadas a você.\nEm toda resposta, cite o documento de origem e a data.\nSe não encontrar a informação, responda: não localizei isso nas fontes disponíveis. Procure a área responsável.\nNão dê opinião, não estime números e não trate de assuntos fora de {TEMA}.\nUse linguagem simples, frases curtas e no máximo cinco linhas por resposta.",
+ q:"Qual instrução funciona melhor?",
+ o:["Seja útil e simpático","Responda só com base nas fontes, cite documento e data, e diga quando não encontrar","Responda tudo que perguntarem"],c:1,
+ e:"Instrução específica e verificável vence instrução genérica."},
+
+{ti:"Escrever a mensagem de abertura",tipo:"faca",
+ li:"A primeira frase ensina a pessoa a perguntar. Sem exemplos, ela pergunta qualquer coisa e se frustra.",
+ p:["Abra o painel de teste, à direita da tela","Clique na mensagem inicial que o agente exibe: isso abre o tópico de início da conversa","Substitua o texto do nó de mensagem pelo texto abaixo e salve","Troque os exemplos por duas perguntas reais que você já ouviu sobre {TEMA}"],
+ rot:"Cole na mensagem de abertura",
+ txt:"Olá! Sou o {AGENTE} e respondo dúvidas sobre {TEMA} com base nos documentos oficiais.\nExperimente perguntar:\n• (escreva aqui uma dúvida comum da sua área)\n• (escreva aqui outra dúvida comum)\nSempre digo de qual documento veio a resposta.",
+ q:"Por que colocar exemplos na abertura?",
+ o:["Para ocupar espaço","Porque mostram o que perguntar e reduzem perguntas fora de escopo","Porque o Copilot exige"],c:1,
+ e:"Exemplo concreto ensina mais rápido que explicação."},
+
+{ti:"Dar conhecimento ao agente",tipo:"faca",
+ li:"Fonte de conhecimento é o que o agente sabe. Sem ela, ele não tem o que responder sobre {TEMA}.",
+ p:["No menu do agente, abra conhecimento","Clique em adicionar","Escolha a origem dos seus documentos: uma biblioteca do SharePoint, arquivos do seu computador ou um site interno","Comece com poucos documentos oficiais e atuais, de três a dez, e confirme"],
+ q:"Melhor forma de dar acesso a normas que vivem no SharePoint:",
+ o:["Colar o texto delas nas instruções","Adicionar a biblioteca como fonte de conhecimento","Criar um tópico para cada norma"],c:1,
+ e:"Fonte conectada se atualiza sozinha. Texto colado envelhece no dia seguinte."},
+
+{ti:"Descrever cada fonte",tipo:"faca",
+ li:"Quando há mais de uma fonte, o agente escolhe pela descrição. Descrição vaga faz ele buscar no lugar errado.",
+ p:["Ainda em conhecimento, clique na fonte que você adicionou","Preencha a descrição dizendo o que aquele material cobre e a partir de quando vale","Repita para cada fonte que adicionar depois"],
+ rot:"Modelo de descrição da fonte",
+ txt:"Documentos oficiais de {TEMA}, usados por {PUBLICO}. Contém regras, prazos e responsabilidades vigentes. Consulte esta fonte para qualquer dúvida sobre {TEMA}.",
+ q:"Para que serve a descrição da fonte?",
+ o:["Para o agente saber quando usar aquele material","Para aparecer bonito no painel","Para acelerar a busca"],c:0,
+ e:"A descrição é o que o agente lê na hora de decidir onde procurar."},
+
+{ti:"Fechar o escopo do agente",tipo:"faca",
+ li:"Por padrão o agente pode completar respostas com o conhecimento geral do modelo, fora das suas fontes. Em assunto normativo, isso é perigoso.",
+ p:["Abra as configurações do agente e procure a seção de geração de respostas","Desative a opção de respostas não fundamentadas","Volte ao painel de teste e pergunte algo fora de {TEMA}","Confira: ele deve dizer que não encontrou, em vez de responder assim mesmo"],
+ q:"O agente inventou um prazo que não está nos documentos. A primeira coisa a checar:",
+ o:["Se as respostas não fundamentadas estão ativas","Se o ícone está correto","Se há muitos tópicos"],c:0,
+ e:"Não saber é resposta melhor que inventar, ainda mais em norma."},
+
+{ti:"Testar com perguntas reais",tipo:"faca",
+ li:"Teste não é perguntar uma coisa e achar bonito. É repetir o mesmo conjunto de perguntas a cada mudança e comparar.",
+ p:["Escreva cinco perguntas que {PUBLICO} realmente faz sobre {TEMA}","Rode as cinco no painel de teste e anote quais falharam","Para cada falha, volte às instruções ou à descrição da fonte e ajuste","Rode as cinco de novo e compare com a rodada anterior"],
+ rot:"Modelo para anotar o teste",
+ txt:"Pergunta: \nResposta do agente: \nCitou a fonte? sim / não\nEstá correta? sim / não\nO que ajustei: ",
+ q:"O agente acertou a resposta, mas citou o documento errado. O que fazer?",
+ o:["Nada, o resultado foi certo","Investigar as fontes e as descrições, porque a próxima pergunta pode errar","Apagar e recomeçar"],c:1,
+ e:"Acerto por acaso não se sustenta."},
+
+{ti:"Publicar para alguém usar",tipo:"faca",
+ li:"Enquanto você não publica, só você vê o agente. Publicar leva a versão atual para o canal escolhido.",
+ p:["Clique em publicar, no alto da tela","Abra a seção de canais e escolha o Microsoft Teams","Siga o assistente e disponibilize para você mesmo primeiro","Abra o Teams e converse com o agente como se fosse um usuário qualquer"],
+ q:"Você editou as instruções e salvou. Quem usa no Teams já vê a mudança?",
+ o:["Sim, salvar aplica na hora","Não, só depois de publicar de novo","Só no dia seguinte"],c:1,
+ e:"Salvar mexe no rascunho. Publicar entrega. Esse é o erro número um de quem começa."},
+
+{ti:"Criar o primeiro tópico",tipo:"faca",
+ li:"Tópico é uma conversa que você desenha, passo a passo. Serve quando o fluxo precisa ser sempre igual: registrar uma solicitação, coletar dados, encaminhar.",
+ p:["No menu do agente, abra tópicos","Clique em adicionar e escolha criar com o Copilot","Cole a descrição abaixo e deixe ele montar o rascunho do tópico","Salve e mantenha aberto: as próximas paradas mexem nele"],
+ rot:"Cole ao criar o tópico",
+ txt:"Crie um tópico que registre uma dúvida não respondida sobre {TEMA}. Pergunte o assunto da dúvida, pergunte o setor da pessoa e confirme que a dúvida foi registrada para a área responsável.",
+ q:"Quando vale desenhar um tópico em vez de deixar o agente responder livremente?",
+ o:["Quando o fluxo precisa seguir sempre os mesmos passos","Sempre","Nunca, tópicos são antigos"],c:0,
+ e:"Tópico é para o que precisa ser previsível e auditável."},
+
+{ti:"Entender os nós",tipo:"faca",
+ li:"Dentro do tópico, cada caixinha é um nó: mensagem, pergunta, condição, ação. Ler o desenho é metade do aprendizado.",
+ p:["Abra o tópico que você criou e olhe a sequência de cima para baixo","Identifique um nó de mensagem e um nó de pergunta","Clique em um deles e veja o painel de propriedades que abre à direita","Mude o texto de uma mensagem e salve, só para sentir o efeito"],
+ q:"Para o fluxo seguir caminhos diferentes conforme a resposta, você usa:",
+ o:["Nó de mensagem","Nó de condição","Fonte de conhecimento"],c:1,
+ e:"Condição é a bifurcação da conversa."},
+
+{ti:"Guardar o que a pessoa respondeu",tipo:"faca",
+ li:"Variável é a memória de curto prazo da conversa. Sem ela, o que a pessoa disse se perde no nó seguinte.",
+ p:["No nó de pergunta do seu tópico, veja onde a resposta é salva: esse é o nome da variável","Renomeie para algo claro, como assunto ou setor","Em um nó de mensagem adiante, insira a variável no texto para confirmar o que foi dito","Teste no painel: a confirmação deve repetir o que você digitou"],
+ q:"Para usar mais adiante o setor informado pela pessoa, você precisa de:",
+ o:["Uma variável","Um cartão","Uma instrução"],c:0,
+ e:"Variável carrega o dado pelo fluxo."},
+
+{ti:"Reconhecer o que a pessoa digita",tipo:"faca",
+ li:"Entidade é o que extrai sentido do texto livre: uma data, um número, ou uma lista sua, como os produtos da sua área.",
+ p:["No menu, abra entidades e crie uma personalizada","Dê o nome do tipo de informação que se repete em {TEMA}","Liste os valores possíveis e inclua os apelidos que as pessoas usam no dia a dia","Volte ao nó de pergunta e escolha essa entidade como tipo de resposta esperada"],
+ q:"A pessoa escreve pode ser pra semana que vem. O que reconhece a data?",
+ o:["Uma variável","Uma entidade de data e hora","O nome do agente"],c:1,
+ e:"Entidade extrai, variável guarda. São coisas diferentes."},
+
+{ti:"Agrupar condições",tipo:"faca",
+ li:"Grupos de condição reúnem várias regras num mesmo nó, em vez de espalhar ramificações pelo desenho. Fluxo mais curto é fluxo mais fácil de revisar.",
+ p:["Adicione um nó de condição depois da pergunta do setor","Use grupos de condição para tratar mais de um caso no mesmo nó","Deixe um caminho para quando nada se encaixar","Teste os dois caminhos no painel"],
+ q:"Vantagem de agrupar condições num nó só:",
+ o:["Fica mais bonito","Reduz ramificações e facilita revisar o fluxo depois","Deixa o agente mais rápido"],c:1,
+ e:"Fluxo emaranhado é fluxo que ninguém mantém."},
+
+{ti:"Escrever a descrição do tópico",tipo:"faca",
+ li:"O agente escolhe qual tópico acionar lendo a descrição de cada um. Essa frase decide se o seu tópico será usado na hora certa.",
+ p:["Abra as propriedades do tópico","Preencha a descrição com o modelo abaixo, adaptando ao seu caso","Teste com uma frase parecida, mas não idêntica, à que você imaginou"],
+ rot:"Modelo de descrição do tópico",
+ txt:"Use quando a pessoa quiser registrar uma dúvida sobre {TEMA} que o agente não conseguiu responder, ou pedir encaminhamento para a área responsável.",
+ q:"Dois tópicos disparam trocados. O que revisar primeiro?",
+ o:["A ordem deles na lista","A descrição de cada um","A cor do ícone"],c:1,
+ e:"O agente lê descrição, não posição na lista."},
+
+{ti:"Dar uma ferramenta ao agente",tipo:"faca",
+ li:"Conhecimento faz o agente responder. Ferramenta faz ele agir: enviar, registrar, consultar um sistema.",
+ p:["No menu do agente, abra ferramentas e clique em adicionar","Escolha uma ação simples para começar, como enviar um e-mail pelo Outlook","Conecte a conta quando for pedido e preencha os campos de entrada","Escreva na descrição quando essa ferramenta deve ser usada"],
+ q:"Qual a diferença entre conhecimento e ferramenta?",
+ o:["Conhecimento responde, ferramenta executa","São a mesma coisa","Ferramenta é só para desenvolvedores"],c:0,
+ e:"Responder é uma coisa. Fazer algo acontecer é outra."},
+
+{ti:"Testar a ação ponta a ponta",tipo:"faca",
+ li:"Ação que não foi testada com dado real costuma falhar justo quando alguém depende dela.",
+ p:["No painel de teste, percorra o tópico até a ferramenta ser chamada","Confirme que a ação aconteceu de verdade: confira o e-mail, o item, o registro","Force um erro de propósito, deixando um campo vazio, e veja o que o agente responde","Ajuste a mensagem de erro para orientar a pessoa"],
+ q:"Ação sensível, como conceder um acesso, deveria:",
+ o:["Ser feita direto pelo agente","Passar por revisão ou aprovação de uma pessoa","Ser proibida sempre"],c:1,
+ e:"Gente no circuito é o controle padrão para ação de impacto."},
+
+{ti:"Formatar a resposta",tipo:"faca",
+ li:"Resposta com estrutura fixa é mais fácil de conferir. Prompt personalizado garante o mesmo formato toda vez.",
+ p:["No menu, abra prompts e crie um novo","Cole o texto abaixo como instrução do prompt","Teste com um caso real e ajuste o formato","Ligue esse prompt ao seu tópico, como ferramenta"],
+ rot:"Cole na instrução do prompt",
+ txt:"A partir da dúvida sobre {TEMA} informada pela pessoa, responda sempre neste formato:\nResumo da dúvida:\nO que a norma diz:\nDocumento e data:\nPróximo passo sugerido:\nSe faltar informação na fonte, escreva não localizado no campo correspondente.",
+ q:"Para a resposta sair sempre no mesmo formato, o caminho é:",
+ o:["Pedir com jeitinho na instrução geral","Um prompt com formato definido","Adicionar mais fontes"],c:1,
+ e:"Formato previsível vem de estrutura, não de pedido gentil."},
+
+{ti:"Republicar e conferir",tipo:"faca",
+ li:"Tudo o que você fez neste trecho está no rascunho. Só existe para os outros depois da publicação.",
+ p:["Clique em publicar novamente","Abra o agente no Teams e refaça as cinco perguntas do trecho anterior","Percorra também o tópico novo, do início ao fim","Anote o que soou estranho: essa lista vira o trabalho do próximo trecho"],
+ q:"Por que refazer as mesmas cinco perguntas depois de mudar o agente?",
+ o:["Para conferir se o que funcionava continua funcionando","Para consumir créditos","Não precisa"],c:0,
+ e:"Sem comparação com o estado anterior, você não sabe se melhorou ou piorou."},
+
+{ti:"Montar um conjunto de teste",tipo:"faca",
+ li:"As avaliações de agentes estão disponíveis para todos: você cadastra perguntas com a resposta esperada e o Copilot Studio mede o agente contra elas, inclusive em conversas de várias rodadas.",
+ p:["No menu, procure a área de avaliações ou testes do agente","Crie um conjunto de teste e cadastre as cinco perguntas que você já vinha usando","Para cada uma, escreva qual seria a resposta correta","Inclua pelo menos um caso com duas ou três rodadas de conversa"],
+ q:"Vantagem do conjunto de teste sobre perguntar na mão:",
+ o:["Roda sempre igual e permite comparar versões","É mais divertido","Substitui a publicação"],c:0,
+ e:"Melhoria sem medição é impressão."},
+
+{ti:"Rodar a avaliação e comparar",tipo:"faca",
+ li:"O valor aparece na segunda rodada: você muda algo e vê, lado a lado, o que melhorou e o que quebrou.",
+ p:["Rode o conjunto e anote o resultado","Faça um ajuste único nas instruções, só um","Rode de novo e compare os dois resultados","Se piorou, desfaça o ajuste: você acabou de evitar um problema em produção"],
+ q:"Você mudou cinco coisas de uma vez e o resultado piorou. O problema é:",
+ o:["Não dá para saber qual mudança causou","O conjunto de teste está errado","Faltou publicar"],c:0,
+ e:"Um ajuste por vez é o que torna o teste útil."},
+
+{ti:"Olhar o que as pessoas perguntam",tipo:"faca",
+ li:"A página de analytics mostra uso, perguntas sem resposta e reações. É a lista de melhorias mais honesta que existe.",
+ p:["No menu do agente, abra analytics","Procure a lista de perguntas dos usuários e as sem resposta","Escolha as três mais frequentes","Resolva cada uma: nova fonte, ajuste de instrução ou tópico novo"],
+ q:"Melhor fonte para decidir a próxima melhoria do agente:",
+ o:["O que você acha que falta","As perguntas reais que ficaram sem resposta","O número de tópicos"],c:1,
+ e:"Quem usa mostra o caminho, de graça."},
+
+{ti:"Dar um dono ao agente",tipo:"faca",
+ li:"Agente sem responsável envelhece e passa a orientar errado. Esta ficha é o que separa uma experiência pessoal de uma solução da área.",
+ p:["Copie a ficha abaixo e preencha","Salve junto da documentação da sua área, não no seu computador","Combine a data da primeira revisão com quem for o dono","Inclua o link do agente e o ambiente onde ele vive"],
+ rot:"Ficha do agente, para preencher",
+ txt:"Agente: {AGENTE}\nAssunto: {TEMA}\nPúblico: {PUBLICO}\nDono do conteúdo: \nDono técnico: \nAmbiente: \nFontes de conhecimento: \nCanais publicados: \nData da última revisão: \nPeriodicidade de revisão: \nComo pedir mudança: ",
+ q:"Por que nomear um dono?",
+ o:["Exigência do Copilot Studio","Porque conteúdo desatualizado orienta errado e alguém precisa revisar","Para dividir a culpa"],c:1,
+ e:"Norma muda. Agente que ninguém revisa vira risco."},
+
+{ti:"Estimar o consumo",tipo:"faca",
+ li:"Cada interação consome créditos Copilot. Existe um estimador de uso para projetar isso antes de abrir para muita gente.",
+ p:["Estime quantas pessoas de {PUBLICO} usariam e quantas perguntas por semana","Procure o estimador de uso de agentes e lance esses números","Leve o resultado para quem responde pelo orçamento da sua área","Combine um teto e o que fazer se o uso passar dele"],
+ q:"Quando fazer essa conta?",
+ o:["Antes de abrir para toda a área","Depois que a fatura chegar","Nunca, é problema de TI"],c:0,
+ e:"Surpresa de custo derruba iniciativa boa."},
+
+{ti:"Rodar um piloto",tipo:"faca",
+ li:"Cinco pessoas usando por uma semana encontram mais problemas que um mês de teste seu, porque perguntam o que você não imaginou.",
+ p:["Escolha cinco pessoas de {PUBLICO} que topem ajudar","Publique para elas e envie o convite abaixo","Peça que avaliem as respostas com o polegar dentro do agente","Ao fim da semana, olhe analytics e ajuste antes de abrir para todos"],
+ rot:"Convite para o piloto",
+ txt:"Oi! Montei o {AGENTE}, um assistente que responde dúvidas sobre {TEMA} com base nos documentos oficiais.\nEstou testando com um grupo pequeno por uma semana.\nUse como usaria um colega: pergunte do seu jeito.\nSe a resposta estiver errada ou incompleta, marque o polegar para baixo. É isso que me mostra o que corrigir.",
+ q:"Para que serve o piloto?",
+ o:["Cumprir etapa formal","Descobrir as perguntas que você não imaginou","Treinar as cinco pessoas"],c:1,
+ e:"O uso real é o único teste que encontra o que você não previu."},
+
+{ti:"Ambientes e soluções",tipo:"saiba",
+ li:"O seu agente está num ambiente de desenvolvimento. Para virar algo oficial, ele precisa ser empacotado numa solução e promovido para homologação e produção, com rastro de quem levou o quê.",
+ p:["Isso normalmente é feito com a área de plataforma, não por você sozinho","Pergunte a ela: existe ambiente de homologação e produção para agentes?","Pergunte também: como peço a promoção do meu agente e o que preciso entregar junto"],
+ q:"Por que não deixar o agente para sempre no ambiente de desenvolvimento?",
+ o:["Fica lento","Porque uso real precisa de ambiente controlado, com aprovação e histórico","Não há diferença"],c:1,
+ e:"É a mesma lógica de segregação de ambientes que já existe para sistemas."},
+
+{ti:"Políticas de dados e canais",tipo:"saiba",
+ li:"Políticas de prevenção de perda de dados definem, por ambiente, quais conectores, canais e fontes podem ser usados. Elas são configuradas por administradores, e é bom você saber que existem.",
+ p:["Se uma ferramenta que você quer não aparece, pode ser bloqueio de política, não defeito","Pergunte à plataforma quais conectores e canais estão liberados no seu ambiente","Leve essa resposta para a documentação do agente, na ficha que você preencheu"],
+ q:"Um conector que você precisa não aparece na lista. A hipótese mais provável:",
+ o:["O Copilot Studio está com erro","Ele está bloqueado por política de dados do ambiente","Falta reiniciar o navegador"],c:1,
+ e:"Saber disso poupa horas procurando defeito onde há regra."},
+
+{ti:"A identidade do seu agente",tipo:"saiba",
+ li:"Desde julho de 2026, todo agente novo recebe automaticamente um Microsoft Entra Agent ID, sem opção de recusa no nível do ambiente. Com ele, permissões de conector, acesso condicional e políticas de dados passam a valer agente a agente.",
+ p:["Entenda a consequência prática: o agente é tratado como uma identidade, igual a um usuário","Se ele agir com a identidade de quem conversa, respeita as permissões daquela pessoa","Se agir com uma identidade de serviço ampla, pode mostrar a alguém o que essa pessoa não poderia ver"],
+ q:"Maior risco de um agente rodar com identidade de acesso amplo:",
+ o:["Ficar mais lento","Expor a uma pessoa conteúdo que ela não teria permissão de ver","Consumir mais créditos"],c:1,
+ e:"Vazamento por herança de permissão é o incidente mais comum em agentes corporativos."},
+
+{ti:"Para onde a estrada continua",tipo:"saiba",
+ li:"Um agente pode chamar outros agentes especializados e alcançar sistemas externos por conectores e servidores MCP. O limite é 128 ferramentas por agente, mas o recomendado fica entre 25 e 30.",
+ p:["Se o seu agente começar a errar a escolha entre muitas ferramentas, divida em agentes por domínio","Antes de abrir para toda a área, confira a ficha: dono, fontes, canais, política e data de revisão","Marque a primeira revisão no calendário agora, enquanto você lembra"],
+ q:"Seu agente acumulou 60 ferramentas e passou a se confundir. Melhor saída:",
+ o:["Escrever instruções maiores","Dividir em agentes conectados por assunto","Desligar a orquestração"],c:1,
+ e:"Especializar e conectar funciona melhor que inchar um agente só."}];
+
+const AVATARES=[
+ {id:0,nome:"Cavaleiro do visor",cor:"#3b4fa8",acento:"#48c0d0",pele:"#e9c39c",
+  cabeca:'<path d="M6.9 8.8a5.1 5.1 0 0 1 10.2 0v2.3H6.9z" fill="%C%"/><rect x="7.6" y="8.1" width="8.8" height="1.7" rx=".85" fill="%A%"/><rect x="11.2" y="1.4" width="1.6" height="2.8" rx=".8" fill="%A%"/>'},
+ {id:1,nome:"Batedor encapuzado",cor:"#2e7d5b",acento:"#f0c05a",pele:"#8d5a3b",
+  cabeca:'<path d="M5.6 11.4V8.4a6.4 6.4 0 0 1 12.8 0v3l-2.6-1.3a4.6 4.6 0 0 0-7.6 0z" fill="%C%"/><circle cx="17.5" cy="9.6" r="1.5" fill="%A%"/>'},
+ {id:2,nome:"Arquiteta do circuito",cor:"#b96b13",acento:"#48c0d0",pele:"#c98d5e",
+  cabeca:'<path d="M5.8 10.2V7.8a6.2 6.2 0 0 1 12.4 0v2.4l-1.7-1.5H7.5z" fill="%C%"/><rect x="6.6" y="3.1" width="10.8" height="1.8" rx=".9" fill="%C%"/><rect x="8.3" y="1.5" width="1.6" height="1.7" fill="%A%"/><rect x="11.2" y=".9" width="1.6" height="2.3" fill="%A%"/><rect x="14.1" y="1.5" width="1.6" height="1.7" fill="%A%"/>'},
+ {id:3,nome:"Maga do farol",cor:"#c0422c",acento:"#f0c05a",pele:"#f0d2b4",
+  cabeca:'<path d="M12 .6l5.6 5.3H6.4z" fill="%C%"/><ellipse cx="12" cy="6" rx="8.2" ry="1.7" fill="%C%"/><circle cx="12" cy="1.1" r="1.4" fill="%A%"/>'}
+];
+function svgAvatar(id,tam){const a=AVATARES[id];
+ return '<svg width="'+tam+'" height="'+(tam*1.35)+'" viewBox="0 0 24 32" aria-hidden="true">'+
+ '<path d="M6.2 13.2c-1.1 5-1.1 8.4 0 11.3h11.6c1.1-2.9 1.1-6.3 0-11.3z" fill="'+a.cor+'" opacity=".32"/>'+
+ '<rect x="7" y="12.4" width="10" height="11.6" rx="4.2" fill="'+a.cor+'"/>'+
+ '<ellipse cx="7.1" cy="14.5" rx="2.4" ry="2" fill="'+a.cor+'"/><ellipse cx="16.9" cy="14.5" rx="2.4" ry="2" fill="'+a.cor+'"/>'+
+ '<rect x="10.6" y="16.4" width="2.8" height="2.8" rx=".8" fill="'+a.acento+'"/>'+
+ '<rect x="8.6" y="22.4" width="2.6" height="7.6" rx="1.3" fill="#14202b" opacity=".78"/>'+
+ '<rect x="12.8" y="22.4" width="2.6" height="7.6" rx="1.3" fill="#14202b" opacity=".78"/>'+
+ '<circle cx="12" cy="8" r="4.6" fill="'+a.pele+'"/>'+
+ a.cabeca.split("%C%").join(a.cor).split("%A%").join(a.acento)+'</svg>'}
+
+let est={avatar:0,nome:"",ag:{nome:"",tema:"",publico:""},i:0,ac:0,registros:[]};
+let fase="fazer",cenAtual=-1,escolhido=0;
+
+const $=id=>document.getElementById(id);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const escuro=()=>window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches;
+const pers=s=>String(s).split("{AGENTE}").join(est.ag.nome).split("{TEMA}").join(est.ag.tema).split("{PUBLICO}").join(est.ag.publico);
+
+async function salvar(){const dado=JSON.stringify(est);
+ try{if(window.storage){await window.storage.set(CHAVE,dado,false);return}}catch(e){}
+ try{localStorage.setItem(CHAVE,dado)}catch(e){}}
+async function carregar(){
+ try{if(window.storage){const r=await window.storage.get(CHAVE,false);if(r&&r.value)return JSON.parse(r.value)}}catch(e){}
+ try{const v=localStorage.getItem(CHAVE);if(v)return JSON.parse(v)}catch(e){}
+ return null}
+async function limpar(){try{if(window.storage){await window.storage.delete(CHAVE,false)}}catch(e){}
+ try{localStorage.removeItem(CHAVE)}catch(e){}}
+
+function meio(t){let s='<div class="meio"><div class="chao"></div>';
+ if(t===0){
+  s+='<div style="position:absolute;right:9%;top:18px;width:30px;height:30px;border-radius:50%;background:#e8a33d"></div>';
+  [4,28,54,78].forEach((x,k)=>{s+='<div style="position:absolute;left:'+x+'%;bottom:28px;width:'+(52+k*12)+'px;height:'+(26+k*7)+'px;border-radius:50% 50% 0 0;background:rgba(46,125,91,'+(0.18+k*0.07)+')"></div>'});
+  [9,22,37,80,90].forEach((x,k)=>{s+='<div style="position:absolute;left:'+x+'%;bottom:28px;width:13px;height:'+(18+(k%3)*8)+'px;border-radius:7px 7px 3px 3px;background:#2e7d5b"></div>'});
+  s+='<div style="position:absolute;left:55%;bottom:28px;width:18px;height:48px;background:#5b6a77;clip-path:polygon(26% 0,74% 0,100% 100%,0 100%)"></div>'+
+     '<div style="position:absolute;left:calc(55% - 8px);bottom:70px;width:36px;height:4px;border-radius:2px;background:#44525f;transform:rotate(26deg)"></div>'+
+     '<div style="position:absolute;left:calc(55% - 8px);bottom:70px;width:36px;height:4px;border-radius:2px;background:#44525f;transform:rotate(-26deg)"></div>'+
+     '<div style="position:absolute;left:calc(55% + 6px);bottom:69px;width:7px;height:7px;border-radius:50%;background:#48c0d0"></div>';
+  [16,45,68].forEach((x,k)=>{s+='<div style="position:absolute;left:'+x+'%;bottom:28px;width:2px;height:'+(20+k*4)+'px;background:#5b6a77"></div>'+
+     '<div style="position:absolute;left:calc('+x+'% + 2px);bottom:'+(40+k*4)+'px;width:11px;height:7px;background:#b96b13;clip-path:polygon(0 0,100% 0,72% 50%,100% 100%,0 100%)"></div>'+
+     '<div style="position:absolute;left:calc('+x+'% - 1px);bottom:'+(50+k*4)+'px;width:4px;height:4px;border-radius:50%;background:#f0c05a"></div>'})}
+ if(t===1){
+  [4,36,70].forEach((x,k)=>{const w=64+k*8,h=32+k*6;
+   s+='<div style="position:absolute;left:'+x+'%;bottom:28px;width:'+w+'px;height:'+h+'px;background:rgba(90,72,54,.5);border:1px solid rgba(185,107,19,.6)"></div>'+
+      '<div style="position:absolute;left:'+x+'%;bottom:'+(28+h)+'px;width:'+w+'px;height:20px;background:#7a5c3a;clip-path:polygon(50% 0,100% 100%,0 100%)"></div>'+
+      '<div style="position:absolute;left:calc('+x+'% + '+(w/2-7)+'px);bottom:30px;width:14px;height:16px;background:#f0a03a;border-radius:2px 2px 0 0"></div>'+
+      '<div style="position:absolute;left:calc('+x+'% + '+(w-14)+'px);bottom:'+(46+h)+'px;width:8px;height:20px;background:#5b6a77"></div>'+
+      '<div style="position:absolute;left:calc('+x+'% + '+(w-13)+'px);bottom:'+(68+h)+'px;width:6px;height:6px;border-radius:50%;background:#f0c05a;opacity:.85"></div>'});
+  [24,58,92].forEach((x,k)=>{s+='<div style="position:absolute;left:'+x+'%;bottom:'+(30+k*6)+'px;width:'+(20+k*4)+'px;height:'+(20+k*4)+'px;border-radius:50%;border:3px solid #b96b13"></div>'+
+     '<div style="position:absolute;left:calc('+x+'% + '+(7+k*2)+'px);bottom:'+(37+k*7)+'px;width:6px;height:6px;border-radius:50%;background:#48c0d0"></div>'});
+  s+='<div style="position:absolute;left:48%;bottom:28px;width:26px;height:9px;background:#44525f;clip-path:polygon(0 0,100% 0,86% 100%,14% 100%)"></div>'+
+     '<div style="position:absolute;left:calc(48% + 8px);bottom:37px;width:10px;height:7px;background:#44525f;border-radius:2px"></div>'}
+ if(t===2){
+  s+='<div style="position:absolute;left:0;right:0;bottom:28px;height:26px;background:#242c4e"></div>';
+  for(let x=0;x<100;x+=6)s+='<div style="position:absolute;left:'+x+'%;bottom:54px;width:14px;height:7px;background:#242c4e"></div>';
+  [8,30,56,82].forEach((x,k)=>{const h=52+((k*13)%26),w=26+(k%2)*6;
+   s+='<div style="position:absolute;left:'+x+'%;bottom:40px;width:'+w+'px;height:'+h+'px;background:#2b3358;border-radius:2px"></div>'+
+      '<div style="position:absolute;left:'+x+'%;bottom:'+(40+h)+'px;width:'+w+'px;height:16px;background:#39406b;clip-path:polygon(50% 0,100% 100%,0 100%)"></div>'+
+      '<div style="position:absolute;left:calc('+x+'% + '+(w/2-1)+'px);bottom:'+(56+h)+'px;width:2px;height:14px;background:#6b74a8"></div>'+
+      '<div style="position:absolute;left:calc('+x+'% + '+(w/2-3)+'px);bottom:'+(70+h)+'px;width:6px;height:6px;border-radius:50%;background:#48c0d0"></div>';
+   for(let v=0;v<Math.floor(h/18);v++)for(let c=0;c<2;c++){if((k+v+c)%3)s+='<div style="position:absolute;left:calc('+x+'% + '+(6+c*11)+'px);bottom:'+(50+v*17)+'px;width:5px;height:7px;border-radius:2px 2px 0 0;background:#f0c05a"></div>'}});
+  s+='<div style="position:absolute;right:11%;top:16px;width:20px;height:20px;border-radius:50%;background:#f2eac9"></div>';
+  [16,33,48,62,79,92].forEach((x,k)=>{s+='<div style="position:absolute;left:'+x+'%;top:'+(14+(k%4)*9)+'px;width:3px;height:3px;border-radius:50%;background:rgba(255,255,255,.7)"></div>'})}
+ return s+'</div>'}
+
+function montarCenario(t){cenAtual=t;const T=TRECHOS[t];
+ document.querySelector(".cena").style.background=escuro()?T.ceuEscuro:T.ceu;
+ document.documentElement.style.setProperty("--acento",T.cor);
+ $("mundo").innerHTML=meio(t)+meio(t);
+ $("selo").textContent=T.cen}
+
+function mostrarMarco(){const m=MARCOS[est.i],el=$("marco");
+ if(!m){el.hidden=true;return}
+ el.hidden=false;
+ el.innerHTML='<div class="caixa"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+ICONES[m[0]]+'</svg></div><span>'+esc(m[1])+'</span>'}
+
+function trofeus(){$("trofeus").innerHTML=[0,1,2].map(k=>
+ '<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="'+(est.registros.length>k?"var(--ouro)":"var(--linha)")+'" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 4h8v5a4 4 0 0 1-8 0zM8 5H5v2a3 3 0 0 0 3 3M16 5h3v2a3 3 0 0 1-3 3M10 17h4v3h-4z"/></svg>').join("")}
+
+function cabecalho(){const t=Math.floor(est.i/10),p=est.i%10;
+ $("titulo-trecho").textContent=TRECHOS[t].n;
+ if(t!==cenAtual)montarCenario(t);
+ $("heroi").innerHTML=svgAvatar(est.avatar,30);
+ $("ficha").innerHTML='Você está construindo: <strong style="color:var(--tinta)">'+esc(est.ag.nome)+'</strong> — '+esc(est.ag.tema)+', para '+esc(est.ag.publico);
+ mostrarMarco();
+ $("trilho").innerHTML=Array.from({length:10},(_,k)=>'<div class="pino '+(k<p?"feito":k===p?"atual":"")+'"></div>').join("");
+ trofeus()}
+
+function caminhar(pronto){const h=$("heroi"),m=$("mundo");
+ h.classList.add("anda");$("marco").hidden=true;
+ m.style.transition="transform 1.2s linear";m.style.transform="translateX(-50%)";
+ setTimeout(()=>{h.classList.remove("anda");m.style.transition="none";m.style.transform="translateX(0)";pronto()},1200)}
+
+async function copiar(txt,btn){
+ try{await navigator.clipboard.writeText(txt)}
+ catch(e){const ta=document.createElement("textarea");ta.value=txt;ta.style.position="fixed";ta.style.opacity="0";
+  document.body.appendChild(ta);ta.select();try{document.execCommand("copy")}catch(_){}ta.remove()}
+ btn.textContent="Copiado";setTimeout(()=>{btn.textContent="Copiar texto"},1800)}
+
+function licao(){fase="fazer";cabecalho();const d=PARADAS[est.i],faca=d.tipo==="faca";
+ let h='<div class="cartao"><div class="cabeca-cartao"><span class="menor">Parada '+(est.i%10+1)+' de 10</span>'+
+ '<span class="tipo '+d.tipo+'">'+(faca?"Faça agora":"Para saber")+'</span></div>'+
+ '<h2>'+esc(pers(d.ti))+'</h2><p class="fina">'+esc(pers(d.li))+'</p>'+
+ '<p class="rotulo">'+(faca?"Passo a passo":"O que isso significa para você")+'</p>'+
+ '<ol class="passos-lista">'+d.p.map(x=>'<li>'+esc(pers(x))+'</li>').join("")+'</ol>';
+ if(d.txt)h+='<div class="bloco"><p class="rotulo">'+esc(d.rot)+'</p><pre id="texto-copia">'+esc(pers(d.txt))+'</pre><button id="btn-copiar">Copiar texto</button></div>';
+ h+='<div id="confirmar"><button class="principal" id="btn-feito">'+(faca?"Fiz isso no Copilot Studio":"Entendi")+'</button></div>'+
+ '<div id="checagem" hidden></div></div>';
+ $("painel").innerHTML=h;
+ if(d.txt)$("btn-copiar").onclick=ev=>copiar(pers(d.txt),ev.currentTarget);
+ $("btn-feito").onclick=()=>{$("confirmar").hidden=true;checagem()};
+ salvar()}
+
+function checagem(){fase="pergunta";const d=PARADAS[est.i];
+ const c=$("checagem");c.hidden=false;
+ c.innerHTML='<p class="rotulo" style="margin-top:4px">Antes de seguir</p><p style="margin:0 0 2px;font-weight:600;font-size:15px">'+esc(pers(d.q))+'</p><div id="opcoes"></div><p id="retorno" style="margin:10px 0 0;font-size:14px"></p><div id="proximo" style="margin-top:14px"></div>';
+ const ops=$("opcoes");
+ d.o.forEach((o,k)=>{const b=document.createElement("button");b.className="opcao";b.textContent=pers(o);b.onclick=()=>responder(k);ops.appendChild(b)});
+ c.scrollIntoView({behavior:"smooth",block:"nearest"})}
+
+function responder(k){if(fase!=="pergunta")return;fase="resposta";
+ const d=PARADAS[est.i],certo=k===d.c;if(certo)est.ac++;
+ [...$("opcoes").children].forEach((b,x)=>{if(x===d.c)b.classList.add("certa");else if(x===k)b.classList.add("errada");b.disabled=true});
+ const r=$("retorno");r.style.color=certo?"var(--certo)":"var(--errado)";
+ r.textContent=(certo?"Isso. ":"Ainda não. ")+pers(d.e);
+ const ultima=est.i%10===9;
+ const avancar=()=>caminhar(()=>{if(ultima)posto();else{est.i++;licao()}});
+ if(certo){$("proximo").innerHTML='<p class="menor" style="margin:0">'+(ultima?"Chegando ao posto…":"Seguindo viagem…")+'</p>';setTimeout(avancar,1600)}
+ else{const b=document.createElement("button");b.className="principal";b.textContent=ultima?"Chegar ao posto":"Continuar";
+  b.onclick=()=>{b.disabled=true;avancar()};$("proximo").appendChild(b)}
+ salvar()}
+
+function posto(){fase="posto";const t=Math.floor(est.i/10),passou=est.ac>=7;
+ $("painel").innerHTML='<div class="cartao" style="text-align:center"><h2 style="margin-bottom:2px">'+(passou?"Posto alcançado":"Quase lá")+'</h2>'+
+ '<p class="menor" style="margin-bottom:14px">'+est.ac+' de 10 acertos · corte de 7</p><div id="acao"></div></div>';
+ const a=$("acao");
+ if(!passou){a.innerHTML='<p class="fina">Refaça o trecho. Os passos já executados no seu agente continuam lá: é só reler e conferir o que ficou diferente.</p>';
+  const b=document.createElement("button");b.className="principal";b.textContent="Refazer o trecho";
+  b.onclick=()=>{est.i=t*10;est.ac=0;licao()};a.appendChild(b);salvar();return}
+ if(est.registros.indexOf(t)<0)est.registros.push(t);
+ trofeus();registro(t);salvar()}
+
+function pdfEsc(s){return String(s).replace(/\\/g,"\\\\").replace(/\(/g,"\\(").replace(/\)/g,"\\)")}
+function pdfBytes(s){const a=new Uint8Array(s.length);for(let i=0;i<s.length;i++){const c=s.charCodeAt(i);a[i]=c>255?63:c}return a}
+function pdfLarg(t,tam,bold){return String(t).length*tam*(bold?0.56:0.5)}
+function gerarPDF(linhas){
+ const W=842,H=595;
+ let c="0.55 0.55 0.55 RG 2 w 30 30 "+(W-60)+" "+(H-60)+" re S\n0.69 0.49 0.07 RG 1 w 42 42 "+(W-84)+" "+(H-84)+" re S\n";
+ linhas.forEach(l=>{const f=l.b?"/F2":"/F1",x=(W-pdfLarg(l.t,l.s,l.b))/2;
+  c+="BT "+f+" "+l.s+" Tf "+(l.g||"0 0 0")+" rg 1 0 0 1 "+x.toFixed(1)+" "+l.y+" Tm ("+pdfEsc(l.t)+") Tj ET\n"});
+ const o=[];
+ o[1]="<</Type/Catalog/Pages 2 0 R>>";
+ o[2]="<</Type/Pages/Kids[3 0 R]/Count 1>>";
+ o[3]="<</Type/Page/Parent 2 0 R/MediaBox[0 0 "+W+" "+H+"]/Resources<</Font<</F1 5 0 R/F2 6 0 R>>>>/Contents 4 0 R>>";
+ o[4]="<</Length "+c.length+">>\nstream\n"+c+"endstream";
+ o[5]="<</Type/Font/Subtype/Type1/BaseFont/Helvetica/Encoding/WinAnsiEncoding>>";
+ o[6]="<</Type/Font/Subtype/Type1/BaseFont/Helvetica-Bold/Encoding/WinAnsiEncoding>>";
+ let p="%PDF-1.4\n";const off=[];
+ for(let i=1;i<=6;i++){off[i]=p.length;p+=i+" 0 obj\n"+o[i]+"\nendobj\n"}
+ const x=p.length;
+ p+="xref\n0 7\n0000000000 65535 f \n";
+ for(let i=1;i<=6;i++)p+=String(off[i]).padStart(10,"0")+" 00000 n \n";
+ p+="trailer\n<</Size 7/Root 1 0 R>>\nstartxref\n"+x+"\n%%EOF";
+ return pdfBytes(p)}
+function baixarPDF(t){
+ const data=new Date().toLocaleDateString("pt-BR");
+ const linhas=[
+  {t:"A ESTRADA DOS AGENTES",s:13,b:true,y:478,g:"0.42 0.42 0.42"},
+  {t:"Registro de percurso",s:11,y:452,g:"0.42 0.42 0.42"},
+  {t:est.nome,s:32,b:true,y:372},
+  {t:TRECHOS[t].reg,s:17,y:326,g:"0.18 0.18 0.18"},
+  {t:"Agente construído: "+est.ag.nome,s:12,y:288,g:"0.32 0.32 0.32"},
+  {t:est.ac+" de 10 acertos · "+data,s:11,y:262,g:"0.42 0.42 0.42"},
+  {t:"Tutorial prático de criação de agentes no Microsoft Copilot Studio",s:10,y:150,g:"0.45 0.45 0.45"},
+  {t:"A estrada dos agentes · Márcia Rodrigues Campos · CC BY-NC-SA 4.0",s:9,y:130,g:"0.55 0.55 0.55"}];
+ const nomeArq="certificado-"+String(est.nome).toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"")+"-trecho-"+(t+1)+".pdf";
+ const url=URL.createObjectURL(new Blob([gerarPDF(linhas)],{type:"application/pdf"}));
+ const a=document.createElement("a");a.href=url;a.download=nomeArq;document.body.appendChild(a);a.click();a.remove();
+ setTimeout(()=>URL.revokeObjectURL(url),5000)}
+
+function registro(t){const data=new Date().toLocaleDateString("pt-BR");
+ $("painel").innerHTML='<div class="registro">'+svgAvatar(est.avatar,34)+
+ '<p style="margin:8px 0 2px;font-size:19px;font-weight:600">'+esc(est.nome)+'</p>'+
+ '<p style="margin:0 0 4px">'+esc(TRECHOS[t].reg)+'</p>'+
+ '<p class="fina" style="margin:0 0 6px">Agente construído: '+esc(est.ag.nome)+'</p>'+
+ '<p class="menor" style="margin:0">'+est.ac+' de 10 acertos · '+data+'</p></div>'+
+ '<div id="texto-final"></div><div id="acao2" style="margin-top:14px;display:flex;gap:8px;flex-wrap:wrap"></div>';
+ if(t===2)$("texto-final").innerHTML='<p class="fina" style="margin-top:14px">Estrada concluída, e o '+esc(est.ag.nome)+' existe de verdade. O que falta agora não está mais no jogo: manter as fontes atualizadas e revisar na data que você combinou.</p>';
+ const a=$("acao2");
+ const bp=document.createElement("button");bp.textContent="Baixar certificado em PDF";
+ bp.onclick=()=>baixarPDF(t);a.appendChild(bp);
+ if(t<2){const b=document.createElement("button");b.className="principal";b.textContent="Retomar a estrada";
+  b.onclick=()=>{est.i++;est.ac=0;caminhar(()=>licao())};a.appendChild(b)}}
+
+function abrirJogo(){$("inicio").hidden=true;$("jogo").hidden=false;
+ const t=Math.floor(est.i/10);
+ if(fase==="posto"&&est.registros.indexOf(t)>=0){cabecalho();registro(t)}else licao()}
+
+$("lista-avatares").innerHTML=AVATARES.map(a=>
+ '<button class="av'+(a.id===0?" on":"")+'" data-av="'+a.id+'">'+svgAvatar(a.id,34)+'<span class="menor">'+a.nome+'</span></button>').join("");
+$("lista-avatares").onclick=ev=>{const b=ev.target.closest("[data-av]");if(!b)return;
+ escolhido=+b.dataset.av;[...$("lista-avatares").children].forEach(c=>c.classList.toggle("on",c===b))};
+["nome","tema","publico","agente"].forEach(id=>{$(id).oninput=()=>{$("erro-inicio").textContent=""}});
+
+$("comecar").onclick=()=>{
+ const n=$("nome").value.trim(),tema=$("tema").value.trim(),pub=$("publico").value.trim();
+ let ag=$("agente").value.trim();
+ if(n.length<2){$("erro-inicio").textContent="Escreva o seu nome";return}
+ if(tema.length<3){$("erro-inicio").textContent="Escreva o assunto do agente que você vai construir";return}
+ if(pub.length<3){$("erro-inicio").textContent="Escreva quem vai usar o agente";return}
+ if(!ag)ag="Assistente de "+tema;
+ est={avatar:escolhido,nome:n,ag:{nome:ag,tema:tema,publico:pub},i:0,ac:0,registros:[]};
+ salvar();abrirJogo()};
+
+$("recomecar").onclick=async()=>{await limpar();location.reload()};
+
+$("ir-inicio").onclick=()=>{$("prerequisitos").hidden=true;$("inicio").hidden=false;window.scrollTo(0,0)};
+
+function botaoRetomar(s,alvo){
+ const t=Math.floor(s.i/10)+1;
+ alvo.innerHTML='<p class="menor" style="margin:14px 0 8px">Há um percurso salvo de '+esc(s.nome||"alguém")+', construindo '+esc((s.ag&&s.ag.nome)||"um agente")+', no trecho '+t+', parada '+(s.i%10+1)+'.</p>';
+ const b=document.createElement("button");b.textContent="Continuar de onde parou";
+ b.style.marginBottom="12px";
+ b.onclick=()=>{est=Object.assign({avatar:0,nome:"",ag:{nome:"",tema:"",publico:""},i:0,ac:0,registros:[]},s);
+  $("prerequisitos").hidden=true;abrirJogo();window.scrollTo(0,0)};
+ alvo.appendChild(b)}
+
+carregar().then(s=>{
+ if(!s||typeof s.i!=="number")return;
+ botaoRetomar(s,$("retomar-pre"));
+ botaoRetomar(s,$("retomar"))});
+</script>
+</body>
+</html>

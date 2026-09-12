@@ -4,7 +4,7 @@ Tutorial gamificado para criar um agente de IA no **Microsoft Copilot Studio**, 
 
 Não é um curso para assistir. É um tutorial para fazer: você abre o Copilot Studio em uma janela e a estrada na outra, e ao final do percurso tem um agente publicado, com fontes conectadas, dono definido e ciclo de revisão combinado.
 
-**Acesse:** https://github.com/MarciaRCampos/estrada-dos-agentes
+**Acesse:** https://marciarcampos.github.io/estrada-dos-agentes
 
 ## Para quem é
 

@@ -172,7 +172,7 @@ footer{margin-top:28px;padding-top:14px;border-top:1px solid var(--linha)}
 </section>
 
 <footer>
-  <p class="menor" style="margin:0">Conteúdo revisado em 12 de setembro de 2026, com base na documentação do Microsoft Copilot Studio. A plataforma publica novidades quase todo mês: confira a data antes de usar em treinamento.</p>
+  <p class="menor" style="margin:0">Conteúdo revisado em 14 de setembro de 2026, com base na documentação do Microsoft Copilot Studio. A plataforma publica novidades quase todo mês: confira a data antes de usar em treinamento.</p>
   <p class="menor" style="margin:6px 0 0">Responsável pelo conteúdo: Márcia Rodrigues Campos · Próxima revisão prevista: dezembro de 2026</p>
   <p class="menor" style="margin:10px 0 0">A estrada dos agentes © 2026 Márcia Rodrigues Campos. Obra licenciada sob Creative Commons Atribuição-NãoComercial-CompartilhaIgual 4.0 Internacional (CC BY-NC-SA 4.0): você pode usar, adaptar e redistribuir mantendo o crédito à autora, sem uso comercial, e licenciando os derivados da mesma forma.</p>
 </footer>
@@ -183,7 +183,7 @@ footer{margin-top:28px;padding-top:14px;border-top:1px solid var(--linha)}
   A estrada dos agentes — tutorial gamificado de criação de agentes no Microsoft Copilot Studio
   Autoria: Márcia Rodrigues Campos · 2026
   Licença: CC BY-NC-SA 4.0 — uso e adaptação permitidos com crédito, sem fins comerciais
-  Conteúdo revisado em 12 de setembro de 2026
+  Conteúdo revisado em 14 de setembro de 2026
 */
 const CHAVE="estrada-agentes-v2";
 
@@ -226,12 +226,12 @@ const PARADAS=[
  o:["Um agente pronto para publicar","Um rascunho que você ainda vai revisar e ajustar","Um relatório sobre o assunto"],c:1,
  e:"O rascunho economiza tempo. A qualidade vem do que você faz nas próximas paradas."},
 
-{ti:"Reconhecer a tela em que você está",tipo:"faca",
- li:"Existem duas experiências de criação convivendo: a padrão e a nova, com runtime de orquestração aprimorado. Tutoriais podem descrever uma e você estar na outra.",
- p:["Olhe o menu lateral do seu agente e anote os nomes que aparecem: visão geral, conhecimento, tópicos, ferramentas, atividade","Se algum nome citado aqui não existir na sua tela, procure pelo mais parecido","Se ficar em dúvida, pergunte à área de plataforma qual experiência é a padrão no seu ambiente"],
- q:"Você segue um passo a passo e as telas não batem. A causa mais provável:",
- o:["O agente está com defeito","O material descreve a outra experiência de criação","Falta licença"],c:1,
- e:"Saber em qual experiência você está evita meia hora procurando um botão que mudou de lugar."},
+{ti:"Escolher o arnês do agente",tipo:"faca",
+ li:"Tudo o que você cria no Copilot Studio roda sobre um arnês: a camada que fica entre o modelo e a configuração do agente, e decide quando chamar o modelo, o que enviar e quais ferramentas acionar. A escolha é feita ao criar o agente, e um agente não migra de um arnês para o outro depois.",
+ p:["Arnês padrão: você desenha tópicos, condições e fluxos com regras explícitas. Bom para processos delimitados e previsíveis","Arnês do GitHub Copilot: você descreve o agente em linguagem natural e ele raciocina sobre a tarefa, quebra em passos e se ajusta. Consome créditos Copilot","Para o seu primeiro agente de dúvidas, o padrão dá mais controle e é mais barato de operar","Confirme com a área de plataforma qual arnês está liberado no seu ambiente antes de decidir"],
+ q:"Você criou o agente num arnês e quer mudar para o outro. É possível?",
+ o:["Sim, é só trocar nas configurações","Não: a escolha do arnês é feita na criação e não migra depois","Só com licença premium"],c:1,
+ e:"Como não dá para migrar, vale escolher o arnês certo no começo, conforme o tipo de trabalho do agente."},
 
 {ti:"Escrever as instruções",tipo:"faca",
  li:"As instruções são o comportamento do agente: quem ele é, o que faz, o que se recusa a fazer. É o ajuste que mais muda a qualidade das respostas.",
@@ -391,7 +391,7 @@ const PARADAS=[
  li:"Agente sem responsável envelhece e passa a orientar errado. Esta ficha é o que separa uma experiência pessoal de uma solução da área.",
  p:["Copie a ficha abaixo e preencha","Salve junto da documentação da sua área, não no seu computador","Combine a data da primeira revisão com quem for o dono","Inclua o link do agente e o ambiente onde ele vive"],
  rot:"Ficha do agente, para preencher",
- txt:"Agente: {AGENTE}\nAssunto: {TEMA}\nPúblico: {PUBLICO}\nDono do conteúdo: \nDono técnico: \nAmbiente: \nFontes de conhecimento: \nCanais publicados: \nData da última revisão: \nPeriodicidade de revisão: \nComo pedir mudança: ",
+ txt:"Agente: {AGENTE}\nAssunto: {TEMA}\nPúblico: {PUBLICO}\nArnês: \nDono do conteúdo: \nDono técnico: \nAmbiente: \nFontes de conhecimento: \nCanais publicados: \nData da última revisão: \nPeriodicidade de revisão: \nComo pedir mudança: ",
  q:"Por que nomear um dono?",
  o:["Exigência do Copilot Studio","Porque conteúdo desatualizado orienta errado e alguém precisa revisar","Para dividir a culpa"],c:1,
  e:"Norma muda. Agente que ninguém revisa vira risco."},
@@ -433,12 +433,12 @@ const PARADAS=[
  o:["Ficar mais lento","Expor a uma pessoa conteúdo que ela não teria permissão de ver","Consumir mais créditos"],c:1,
  e:"Vazamento por herança de permissão é o incidente mais comum em agentes corporativos."},
 
-{ti:"Para onde a estrada continua",tipo:"saiba",
- li:"Um agente pode chamar outros agentes especializados e alcançar sistemas externos por conectores e servidores MCP. O limite é 128 ferramentas por agente, mas o recomendado fica entre 25 e 30.",
- p:["Se o seu agente começar a errar a escolha entre muitas ferramentas, divida em agentes por domínio","Antes de abrir para toda a área, confira a ficha: dono, fontes, canais, política e data de revisão","Marque a primeira revisão no calendário agora, enquanto você lembra"],
- q:"Seu agente acumulou 60 ferramentas e passou a se confundir. Melhor saída:",
- o:["Escrever instruções maiores","Dividir em agentes conectados por assunto","Desligar a orquestração"],c:1,
- e:"Especializar e conectar funciona melhor que inchar um agente só."}];
+{ti:"Quando o processo vira um fluxo",tipo:"saiba",
+ li:"Nem tudo é conversa. Um fluxo de trabalho é um caminho determinístico, disparado por evento, agenda ou manualmente, que executa passos sempre na mesma ordem. Dentro dele, um nó de agente entrega um passo específico a um agente, para interpretar o que não cabe em regra fixa.",
+ p:["Pense num relatório que chega e precisa ser conferido contra uma norma: o fluxo controla a sequência, o nó de agente lê e sinaliza o que destoa","Use fluxo quando a ordem dos passos é fixa; use o nó de agente no passo que exige raciocínio sobre documentos","Antes de abrir para toda a área, confira a ficha: dono, fontes, canais, arnês, política e data de revisão","Marque a primeira revisão no calendário agora, enquanto você lembra"],
+ q:"Num fluxo que confere despesas contra a política, por que usar um nó de agente em vez de só condições?",
+ o:["Porque fica mais bonito","Porque o agente raciocina sobre a política escrita, em vez de você codificar cada regra como condição","Porque condição não existe em fluxo"],c:1,
+ e:"Fluxo garante a sequência; o nó de agente resolve o passo que depende de interpretar texto."}];
 
 const AVATARES=[
  {id:0,nome:"Cavaleiro do visor",cor:"#3b4fa8",acento:"#48c0d0",pele:"#e9c39c",

@@ -14,9 +14,9 @@ Pessoas que nunca criaram um agente. Não é preciso saber programar. Cada parad
 
 A pessoa escolhe o assunto do próprio agente logo no início, e todos os textos do tutorial saem personalizados com esse tema. São 30 paradas, divididas em três trechos:
 
-1. **Do zero ao agente publicado** — ambiente, criação, instruções, mensagem de abertura, fontes de conhecimento, escopo fechado, teste e publicação no Teams.
+1. **Do zero ao agente publicado** — ambiente, escolha do arnês, criação, instruções, mensagem de abertura, fontes de conhecimento, escopo fechado, teste e publicação no Teams.
 2. **Ensinando o agente a agir** — tópicos, nós, variáveis, entidades, condições, descrição para orquestração, primeira ferramenta com conector e resposta formatada.
-3. **Pronto para os outros usarem** — conjunto de teste, avaliação comparada, analytics, ficha com dono e revisão, estimativa de consumo, piloto, além do que é bom saber sobre ambientes, políticas de dados e identidade do agente.
+3. **Pronto para os outros usarem** — conjunto de teste, avaliação comparada, analytics, ficha com dono e revisão, estimativa de consumo, piloto, além do que é bom saber sobre ambientes, políticas de dados, identidade do agente e fluxos de trabalho com nó de agente.
 
 Cada parada pede a execução no Copilot Studio, a confirmação de que foi feita e uma pergunta de checagem. A nota de corte é de 70% por trecho: abaixo disso, o trecho é refeito.
 
@@ -47,7 +47,7 @@ A primeira tela do tutorial repete essa lista.
 
 O Copilot Studio publica novidades quase todo mês, e nomes de telas e recursos mudam. O rodapé do arquivo traz a data da última revisão e a data da próxima revisão prevista. Antes de usar em treinamento, confira se ainda faz sentido.
 
-Revisão atual: **12 de setembro de 2026**.
+Revisão atual: **14 de setembro de 2026**.
 
 ## Autoria e licença
 
